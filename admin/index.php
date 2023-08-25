@@ -1,13 +1,9 @@
 <?php
 
-session_start();
 require '../config/config.php';
 require '../config/functions.php';
 
-if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
-
-  header('location: login.php');
-}
+checkAdmin();
 
 $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
 $statement->execute();
@@ -54,7 +50,7 @@ $results = $statement->fetchAll();
                   <a href="edit.php?id=<?= $result['id']?>" type="button" class="btn btn-info ml-2">Edit</a>
                 </div>
                 <div class="btn-group">
-                  <a href="delete.php?id=<?= $result['id']?>" type="button" class="btn btn-danger ml-2">Delete</a>
+                  <a href="delete.php?id=<?= $result['id']?>" type="button" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
                 </div>
               </td>
             </tr>

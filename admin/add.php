@@ -1,13 +1,9 @@
 <?php
 
-session_start();
 require '../config/config.php';
 require '../config/functions.php';
 
-if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
-
-  header('location: login.php');
-}
+checkAdmin();
 
 if($_POST){
 
@@ -39,9 +35,9 @@ if($_POST){
 
         if($result){
 
-            echo "<script>
-            alert('Successful!! New post is inserted.');
-            </script>";
+            echo "<script> alert('Successfully updated!!');
+                window.location.href='index.php';
+                </script>";
         }
     }
 }
