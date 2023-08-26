@@ -5,27 +5,46 @@ require '../config/functions.php';
 
 checkAdmin();
 
-$statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
-$statement->execute();
-$rawResults = $statement->fetchAll();
-
 if(! empty($_GET['pageno'])){
   $pageno = $_GET['pageno'];
 }else{
   $pageno = 1;
 }
 
-$numOfrecs = 5;
+$numOfrecs = 1;
 $offset = ($pageno - 1) * $numOfrecs;
-$total_pages = ceil(count($rawResults) / $numOfrecs);
 
-$statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
-$statement->execute();
-$results = $statement->fetchAll();
+if(empty($_POST['search'])){
+
+  $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+  $statement->execute();
+  $rawResults = $statement->fetchAll();
+
+  $total_pages = ceil(count($rawResults) / $numOfrecs);
+
+  $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
+  $statement->execute();
+  $results = $statement->fetchAll();
+
+}else{
+
+  $searchKey = $_POST['search'];
+
+  $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%".$searchKey."%' ORDER BY id DESC");
+  $statement->execute();
+  $rawResults = $statement->fetchAll();
+  // dd($rawResults);
+  
+  $total_pages = ceil(count($rawResults) / $numOfrecs);
+
+  $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%{$searchKey}%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
+  $statement->execute();
+  $results = $statement->fetchAll();
+}
+
+include 'views/header.php'; 
 
 ?>
-
-<?php include 'views/header.php'; ?>
 
   <div class="col-md-12">
     <div class="card">
@@ -79,7 +98,7 @@ $results = $statement->fetchAll();
       <nav aria-label="Page navigation example">
         <ul class="pagination float-right mr-3">
           <li class="page-item">
-            <a class="page-link" href="?pageno=1">First</a>
+            <a class="page-link" href="<?php if($total_pages == 1){echo '#';}else{echo '?pageno=1';}?>">First</a>
           </li>
           <li class="page-item <?php if($pageno <= 1){ echo 'disabled';}?>">
             <a class="page-link" href="<?php if($pageno <= 1){echo '#';}else{echo '?pageno='.($pageno-1);}?>">Previous</a>
@@ -89,7 +108,7 @@ $results = $statement->fetchAll();
           <li class="page-item <?php if($pageno >= $total_pages){ echo 'disabled';}?>">
             <a class="page-link" href="<?php if($pageno >= $total_pages){ echo '#';}else{echo '?pageno='.($pageno+1);}?>">Next</a>
           </li>
-          <li class="page-item"><a class="page-link" href="?pageno=<?= $total_pages;?>">Last</a></li>
+          <li class="page-item"><a class="page-link" href="<?= ($total_pages == 1) ? '#' : '?pageno='.$total_pages;?>">Last</a></li>
         </ul>
       </nav>
     </div>
