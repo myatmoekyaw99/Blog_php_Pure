@@ -47,6 +47,64 @@ include 'views/header.php';
 ?>
 
   <div class="col-md-12">
+
+    <h5 class="">Info Box</h5>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Posts</span>
+            <span class="info-box-number">1,410</span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+      <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-success"><i class="far fa-comment"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Comments</span>
+            <span class="info-box-number">410</span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+      <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-warning"><i class="far fa-user"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Users</span>
+            <span class="info-box-number">13,648</span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+      <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Likes</span>
+            <span class="info-box-number">93,139</span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
     <div class="card">
       <div class="card-header">
         <h1 class="card-title">Posts Lists</h1>            
