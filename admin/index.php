@@ -3,7 +3,7 @@
 require '../config/config.php';
 require '../config/functions.php';
 
-checkAdmin();
+checkLogin();
 
 if(! empty($_GET['pageno'])){
   $pageno = $_GET['pageno'];
@@ -11,7 +11,7 @@ if(! empty($_GET['pageno'])){
   $pageno = 1;
 }
 
-$numOfrecs = 1;
+$numOfrecs = 4;
 $offset = ($pageno - 1) * $numOfrecs;
 
 if(empty($_POST['search'])){

@@ -1,43 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Widgets</title>
+<?php
+require 'config/functions.php';
+require 'config/config.php';
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
-</head>
-<body class="hold-transition sidebar-mini">
-<div class="wrapper">
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand navbar-dark py-2" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.php" class="nav-link text-white">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#contact" class="nav-link text-white">Contact</a>
-      </li>
-    </ul>
+$statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+$statement->execute();
+$results = $statement->fetchAll();
 
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.php" class="nav-link text-info">A Programmer Blog Site</a>
-      </li>
-    </ul>
-  </nav>
-  <!-- /.navbar -->
+require 'header.php';
+?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="">
@@ -72,44 +42,8 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-4">
-            <!-- Box Comment -->
-            <div class="card card-widget">
-              <div class="card-header">
-                <div class="user-block">
-                  <img class="img-circle" src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
-                  <span class="description">Shared publicly - 7:30 PM Today</span>
-                </div>
-                <!-- /.user-block -->
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                </div>
-                <!-- /.card-tools -->
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer">
-                <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button>
-                <span class="float-right text-muted ">127 likes - 3 comments</span>
-              </div>
-              <!-- /.card-footer -->
-              <div class="card-footer">
-
-              </div>
-              <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
           
+        <?php foreach($results as $value) :?>
           <div class="col-md-4">
             <!-- Box Comment -->
             <div class="card card-widget">
@@ -121,87 +55,30 @@
                 </div>
                 <!-- /.user-block -->
                 <div class="card-tools">
-                  <button type="button" class="btn btn-tool" title="Mark as read">
-                    <i class="far fa-circle"></i>
-                  </button>
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
                   </button>
                 </div>
                 <!-- /.card-tools -->
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share</button>
-                <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button>
-                <span class="float-right text-muted">127 likes - 3 comments</span>
+                <a href="postdetail.php?id=<?= $value['id']?>">
+                  <img class="img-fluid pad" src="admin/images/<?= $value['image']?>" alt="Photo" style="height: 200px !important;">
+                  <h5 class="mt-2"><?= $value['title'];?></h5>
+                </a>
               </div>
               <!-- /.card-body -->
-              <div class="card-footer card-comments">
-                
-              </div>
               <!-- /.card-footer -->
-              <div class="card-footer">
-
+              <div class="card-footer text-center">
+              <span class=" text-muted ">127 likes - 3 comments</span>
               </div>
               <!-- /.card-footer -->
             </div>
             <!-- /.card -->
           </div>
           <!-- /.col -->
-
-          <div class="col-md-4">
-            <!-- Box Comment -->
-            <div class="card card-widget">
-              <div class="card-header">
-                <div class="user-block">
-                  <img class="img-circle" src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
-                  <span class="description">Shared publicly - 7:30 PM Today</span>
-                </div>
-                <!-- /.user-block -->
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" title="Mark as read">
-                    <i class="far fa-circle"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-                <!-- /.card-tools -->
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share</button>
-                <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button>
-                <span class="float-right text-muted">127 likes - 3 comments</span>
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer card-comments">
-                
-              </div>
-              <!-- /.card-footer -->
-              <div class="card-footer">
-
-              </div>
-              <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-
+          <?php endforeach; ?>
         </div>
         <!-- /.row -->
 
@@ -255,8 +132,7 @@
             <strong>Copyright &copy; 2023-2024 <a href="#">A Programmer</a>.</strong> All rights reserved.
           </div>
         </div>
-        <!-- /.row -->
-  
+        <!-- /.row --> 
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

@@ -3,7 +3,7 @@
 require '../config/config.php';
 require '../config/functions.php';
 
-checkAdmin();
+checkLogin();
 
 $statement = $pdo->prepare("DELETE FROM posts WHERE id=".$_GET['id']);
 $statement->execute();
