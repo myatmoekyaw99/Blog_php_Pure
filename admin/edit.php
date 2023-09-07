@@ -3,7 +3,7 @@
 require '../config/config.php';
 require '../config/functions.php';
 
-checkLogin();
+checkAdmin();
 
     if($_POST){
 

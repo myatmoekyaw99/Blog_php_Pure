@@ -3,6 +3,7 @@
 session_start();
  
 require '../config/config.php';
+require '../config/functions.php';
 
 if($_POST){
 
@@ -15,12 +16,14 @@ if($_POST){
     $statement->execute();
     $user = $statement->fetch(PDO::FETCH_ASSOC);
 
+    // dd($user['role']);
     if($user){
 
-        if($user['password'] === $password){
+        if($user['password'] === $password && $user['role'] === 1){
 
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['name'];
+            $_SESSION['role'] = $user['role'];
             $_SESSION['logged_in'] = time();
         
             header('location:index.php');

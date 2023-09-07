@@ -3,7 +3,7 @@ session_start();
 
 require '../config/functions.php';
 
-checkLogin();
+checkAdmin();
 session_destroy();
 
 header('location: login.php');

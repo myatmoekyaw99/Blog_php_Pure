@@ -3,7 +3,8 @@
 require '../config/config.php';
 require '../config/functions.php';
 
-checkLogin();
+checkAdmin();
+// dd(checkAdmin());
 
 if(! empty($_GET['pageno'])){
   $pageno = $_GET['pageno'];

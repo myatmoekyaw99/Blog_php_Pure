@@ -5,6 +5,8 @@ session_start();
 require 'config/config.php';
 require 'config/functions.php';
 
+isLogin();
+
 if($_POST){
 
     $email = $_POST['email'];
@@ -18,7 +20,7 @@ if($_POST){
 
     if($user){
 
-        if($user['password'] === $password){
+        if($user['password'] === $password && $user['role'] === 0){
 
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['name'];

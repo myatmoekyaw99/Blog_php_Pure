@@ -1,10 +1,43 @@
 <?php
+session_start();
 require 'config/functions.php';
 require 'config/config.php';
 
-$statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
-$statement->execute();
-$results = $statement->fetchAll();
+if(! empty($_GET['pageno'])){
+  $pageno = $_GET['pageno'];
+}else{
+  $pageno = 1;
+}
+
+$numOfrecs = 3;
+$offset = ($pageno - 1) * $numOfrecs;
+
+if(empty($_POST['search'])){
+
+  $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+  $statement->execute();
+  $rawResults = $statement->fetchAll();
+
+  $total_pages = ceil(count($rawResults) / $numOfrecs);
+
+  $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
+  $statement->execute();
+  $results = $statement->fetchAll();
+
+}else{
+  $searchKey = $_POST['search'];
+
+  $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%".$searchKey."%' ORDER BY id DESC");
+  $statement->execute();
+  $rawResults = $statement->fetchAll();
+  // dd($rawResults);
+  
+  $total_pages = ceil(count($rawResults) / $numOfrecs);
+
+  $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%{$searchKey}%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
+  $statement->execute();
+  $results = $statement->fetchAll();
+}
 
 require 'header.php';
 ?>
@@ -15,25 +48,17 @@ require 'header.php';
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Blogs</h1>
-          </div>
-          <ul class="navbar-nav ml-auto">
-            <!-- Navbar Search -->
-            <li class="nav-item">
-                <form class="form-inline">
-                  <div class="input-group input-group-sm">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                  </div>
+          <form class="form-inline ml-auto" method="POST">
+            <div class="input-group input-group-sm">
+              <input class="form-control" type="search" name="search" placeholder="Search" aria-label="Search">
+            </div>
 
-                  <div class="input-group-append">
-                      <button class="btn btn-navbar" type="submit">
-                        <i class="fas fa-search"></i>
-                      </button>
-                  </div>
-                </form>
-            </li>
-          </ul>
+            <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+            </div>
+          </form>
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -43,7 +68,7 @@ require 'header.php';
       <div class="container-fluid">
         <div class="row">
           
-        <?php foreach($results as $value) :?>
+          <?php foreach($results as $value) :?>
           <div class="col-md-4">
             <!-- Box Comment -->
             <div class="card card-widget">
@@ -71,7 +96,14 @@ require 'header.php';
               <!-- /.card-body -->
               <!-- /.card-footer -->
               <div class="card-footer text-center">
-              <span class=" text-muted ">127 likes - 3 comments</span>
+                <?php 
+                
+                  $stmt = $pdo->prepare("SELECT * FROM comments WHERE post_id =".$value['id']);
+                  $stmt->execute();
+                  $cms = $stmt->fetchAll();
+                
+                ?>
+              <span class=" text-muted ">127 likes - <?= count($cms);?> comments</span>
               </div>
               <!-- /.card-footer -->
             </div>
@@ -82,6 +114,22 @@ require 'header.php';
         </div>
         <!-- /.row -->
 
+        <nav class="row mb-3">
+          <ul class="pagination mx-auto">
+            <li class="page-item">
+              <a class="page-link" href="<?php if($total_pages == 1){echo '#';}else{echo '?pageno=1';}?>">First</a>
+            </li>
+            <li class="page-item <?php if($pageno <= 1){ echo 'disabled';}?>">
+              <a class="page-link" href="<?php if($pageno <= 1){echo '#';}else{echo '?pageno='.($pageno-1);}?>">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#"><?= $pageno; ?></a></li>
+
+            <li class="page-item <?php if($pageno >= $total_pages){ echo 'disabled';}?>">
+              <a class="page-link" href="<?php if($pageno >= $total_pages){ echo '#';}else{echo '?pageno='.($pageno+1);}?>">Next</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="<?= ($total_pages == 1) ? '#' : '?pageno='.$total_pages;?>">Last</a></li>
+          </ul>
+        </nav>
         <!--Contact--->
         <div class="row bg-dark pt-3" id="contact">
           <div class="col-md-4 mx-auto">
@@ -97,26 +145,28 @@ require 'header.php';
               </div>
               <div class="card-footer">
                 <div class="row">
-                  <div class="col-sm-4 border-right">
+                  <!-- <div class="col-sm-4 border-right">
                     <div class="description-block">
                       <h5 class="text-info">3,200</h5>
                       <span class="text-info">SALES</span>
                     </div>
-                    <!-- /.description-block -->
-                  </div>
+                    /.description-block
+                  </div> -->
                   <!-- /.col -->
-                  <div class="col-sm-4 border-right">
+                  <div class="col-sm-6 border-right">
                     <div class="description-block">
-                      <h5 class="text-info">13,000</h5>
-                      <span class="text-info">FOLLOWERS</span>
+                      <p class="text-info my-0">aprogrammer@gmail.com</p>
+                      <span class="text-info"><a href="#"><i class="fa-brands fa-facebook"></i> Facebook</a></span><br>
+                      <span class="text-info"><a href="#"><i class="fa-brands fa-linkedin"></i> Linkedin</a></span>
+                      <span class="text-info"><a href="#"><i class="fa-brands fa-github"></i> Github</a></span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
-                  <div class="col-sm-4">
+                  <div class="col-sm-6">
                     <div class="description-block">
-                      <h5 class="text-info">35</h5>
-                      <span class="text-info">PRODUCTS</span>
+                      <h6 class="text-info"> No.130/B, 18th St, Latha, Yangon.</h6>
+                      <span class="text-info">09-999000111</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
@@ -140,19 +190,4 @@ require 'header.php';
     <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
       <i class="fas fa-chevron-up"></i>
     </a>
-
-  </div>
-  <!-- /.content-wrapper -->
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-</body>
-</html>
+<?php include 'footer.html';?>
