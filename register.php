@@ -5,11 +5,24 @@ session_start();
 require 'config/config.php';
 require 'config/functions.php';
 
+
 if($_POST){
+
+  $file = 'images/'.$_FILES['image']['name'];
+  $imageType = pathinfo($file,PATHINFO_EXTENSION);
+  
+  if($imageType != 'png' && $imageType != 'jpg' && $imageType != 'jpeg'){
+
+    echo "<script>
+    alert('Incorrect file extension!Image must be png,jpg or jpeg.');
+    </script>";
+  }else{
 
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $image = $_FILES['image']['name'];
+    move_uploaded_file($_FILES['image']['tmp_name'],$file);
     
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email=:email");
     $stmt->bindValue(':email',$email);
@@ -21,12 +34,13 @@ if($_POST){
         alert('Email already exist!');
     </script>";
     }else{
-        $statement = $pdo->prepare("INSERT INTO users(name,email,password) VALUES(:name,:email,:password)");
+        $statement = $pdo->prepare("INSERT INTO users(name,email,password,image) VALUES(:name,:email,:password,:image)");
         $result = $statement->execute(
             array(
                 ':name' => $name,
                 ':email' => $email,
-                ':password' => $password
+                ':password' => $password,
+                ':image' => $image
             ),
         );
 
@@ -34,7 +48,7 @@ if($_POST){
             echo "<script>alert('User registration is successful!'); window.location.href='login.php';</script>";
         }
     }
-   
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -63,7 +77,7 @@ if($_POST){
     <div class="card-body login-card-body bg-info">
       <p class="login-box-msg">Register a new account</p>
 
-      <form action="register.php" method="post">
+      <form action="register.php" method="post" enctype="multipart/form-data">
 
         <div class="input-group mb-3">
           <input type="text" name="name" class="form-control" placeholder="Name">
@@ -86,6 +100,16 @@ if($_POST){
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+
+        <label for="image">Profile image:</label><br>
+        <div class="input-group mb-3">
+          <input type="file" name="image" id="image" class="form-control" placeholder="Image">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-image"></span>
             </div>
           </div>
         </div>

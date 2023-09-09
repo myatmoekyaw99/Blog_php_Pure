@@ -17,13 +17,13 @@ $offset = ($pageno - 1) * $numOfrecs;
 
 if(empty($_POST['search'])){
 
-  $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+  $statement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
   $statement->execute();
   $rawResults = $statement->fetchAll();
 
   $total_pages = ceil(count($rawResults) / $numOfrecs);
 
-  $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
+  $statement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numOfrecs");
   $statement->execute();
   $results = $statement->fetchAll();
 
@@ -31,21 +31,17 @@ if(empty($_POST['search'])){
 
   $searchKey = $_POST['search'];
 
-  $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%".$searchKey."%' ORDER BY id DESC");
+  $statement = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%".$searchKey."%' ORDER BY id DESC");
   $statement->execute();
   $rawResults = $statement->fetchAll();
   // dd($rawResults);
   
   $total_pages = ceil(count($rawResults) / $numOfrecs);
 
-  $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%{$searchKey}%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
+  $statement = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%{$searchKey}%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
   $statement->execute();
   $results = $statement->fetchAll();
 }
-
-$statement = $pdo->prepare("SELECT * FROM users WHERE role=0 ORDER BY id DESC");
-$statement->execute();
-$uresults = $statement->fetchAll();
 
 include 'views/header.php'; 
 
@@ -53,70 +49,13 @@ include 'views/header.php';
 
   <div class="col-md-12">
 
-    <h5 class="">Info Box</h5>
-    <div class="row">
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Posts</span>
-            <span class="info-box-number">1,410</span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-success"><i class="far fa-comment"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Comments</span>
-            <span class="info-box-number">410</span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-warning"><i class="far fa-user"></i></span>
-
-          <a href="user_show.php" class="text-dark">
-            <div class="info-box-content">
-              <span class="info-box-text">Users</span>
-              <span class="info-box-number"><?= count($uresults);?></span>
-            </div>
-          </a>
-          <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Likes</span>
-            <span class="info-box-number">93,139</span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-    </div>
-    <!-- /.row -->
+    <h4 class="text-info">Users Table</h4>
 
     <div class="card">
       <div class="card-header">
-        <h1 class="card-title">Posts Lists</h1>            
+        <!-- <h1 class="card-title">Posts Lists</h1>             -->
         <div class="float-right">
-          <a href="add.php" type="button" class="btn btn-success">Create new post</a>
+          <a href="user_add.php" type="button" class="btn btn-success">Create new user</a>
         </div>
       </div>
       <!-- /.card-header -->
@@ -125,8 +64,9 @@ include 'views/header.php';
           <thead>
             <tr>
               <th style="width: 10px">#</th>
-              <th>Title</th>
-              <th>Content</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
               <th style="width: 200px">Actions</th>
             </tr>
           </thead>
@@ -139,9 +79,12 @@ include 'views/header.php';
           ?>
             <tr>
               <td><?= $i ?></td>
-              <td><?=$result['title']?></td>
+              <td><?=$result['name']?></td>
               <td>
-              <?= substr($result['content'],0,60); ?>
+              <?= $result['email']; ?>
+              </td>
+              <td>
+              <?= $result['role'] === 0 ? 'User' : 'Admin' ;?>
               </td>
               <td>
                 <div class="btn-group">

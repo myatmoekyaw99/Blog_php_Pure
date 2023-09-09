@@ -42,6 +42,7 @@ if($_POST){
     }
 }
 
+
 ?>
 
 <?php include 'views/header.php'; ?>
@@ -67,6 +68,10 @@ if($_POST){
             <div class="form-group">
                 <label for="image">Image</label><br>
                 <input type="file" name="image" id="image" value="" required>
+            </div>
+
+            <div class="form-group">
+                <label class="h5" id="role"><input type="checkbox" name="role" id="role" value="1" class="">  Admin</label>
             </div>
 
             <div class="form-group">

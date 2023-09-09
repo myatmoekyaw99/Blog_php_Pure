@@ -16,6 +16,11 @@ $stmt = $pdo->prepare("SELECT * FROM comments WHERE post_id=$post_id");
 $stmt->execute();
 $cmResults = $stmt->fetchAll();
 
+$author = $result['author_id'];
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id=$author");
+$stmt->execute();
+$user = $stmt->fetch();
+
 if($_POST){
 
   $comment = $_POST['comment'];
@@ -33,7 +38,7 @@ if($_POST){
   }
 }
  
-require 'header.php';
+require 'views/header.php';
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -64,9 +69,15 @@ require 'header.php';
             <div class="card card-widget">
               <div class="card-header">
                 <div class="user-block">
-                  <img class="img-circle" src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
-                  <span class="description">Shared publicly - 7:30 PM Today</span>
+                  <img class="img-circle" src="admin/images/<?= $user['image']?>" alt="User Image">
+                  <span class="username"><a href="#"><?= $user['name']?></a></span>
+                  <span class="description">Shared publicly - 
+                    <?php $date = new DateTimeImmutable($result['created_at']);
+                      echo $date->format('d/m/y');
+                      echo "&nbsp;&nbsp;&nbsp;";
+                      echo $date->format('g:i a');
+                    ?>
+                  </span>
                 </div>
                 <!-- /.user-block -->
               </div>
@@ -76,7 +87,7 @@ require 'header.php';
 
                 <p class="mt-2"><?= $result['content'];?></p>
                 <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button>
-                <span class="float-right text-muted">127 likes - 3 comments</span>
+                <span class="float-right text-muted">127 likes - <?= count($cmResults);?> comments</span>
               </div>
               <!-- /.card-body -->
               <div class="card-footer card-comments">
@@ -94,7 +105,7 @@ require 'header.php';
                 ?>
                 <div class="mt-4 card-comment">
                   <!-- User image -->
-                  <img class="img-circle img-sm" src="dist/img/user3-128x128.jpg" alt="User Image">
+                  <img class="img-circle img-sm" src="admin/images/<?= $uresult['image'];?>" alt="User Image">
                   <div class="comment-text">
                     <span class="username">
                       <?= $uresult['name'] ?? '';?>
@@ -108,10 +119,8 @@ require 'header.php';
                   </div>
                   <!-- /.comment-text -->
                 </div>
-                <!-- /.card-comment -->
-                  
+                <!-- /.card-comment -->                 
                 <?php endforeach ;?>
-
               </div>
               <!-- /.card-footer -->
               <div class="card-footer">
@@ -126,19 +135,11 @@ require 'header.php';
             <!-- /.card -->
           </div>
           <!-- /.col -->
-
         </div>
         <!-- /.row -->
         <footer class="row bg-dark py-4">
           <!-- Default to the left -->
           <p class="mx-auto"><strong>Copyright &copy; 2023-2024 <a href="#">A Programmer</a>.</strong> All rights reserved.</p>
         </footer>
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
 
-    <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
-      <i class="fas fa-chevron-up"></i>
-    </a>
-    
-  <?php include 'footer.html'?>
+<?php include 'views/footer.html'?>
