@@ -88,10 +88,10 @@ include 'views/header.php';
               </td>
               <td>
                 <div class="btn-group">
-                  <a href="edit.php?id=<?= $result['id']?>" type="button" class="btn btn-info ml-2">Edit</a>
+                  <a href="user_edit.php?id=<?= $result['id']?>" type="button" class="btn btn-info ml-2">Edit</a>
                 </div>
                 <div class="btn-group">
-                  <a href="delete.php?id=<?= $result['id']?>" type="button" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
+                  <a href="user_delete.php?id=<?= $result['id']?>" type="button" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
                 </div>
               </td>
             </tr>
@@ -111,7 +111,7 @@ include 'views/header.php';
           <li class="page-item <?php if($pageno <= 1){ echo 'disabled';}?>">
             <a class="page-link" href="<?php if($pageno <= 1){echo '#';}else{echo '?pageno='.($pageno-1);}?>">Previous</a>
           </li>
-          <li class="page-item"><a class="page-link" href="#"><?= $pageno; ?></a></li>
+          <li class="page-item"><a class="page-link" href="#">Page <?= $pageno; ?></a></li>
 
           <li class="page-item <?php if($pageno >= $total_pages){ echo 'disabled';}?>">
             <a class="page-link" href="<?php if($pageno >= $total_pages){ echo '#';}else{echo '?pageno='.($pageno+1);}?>">Next</a>

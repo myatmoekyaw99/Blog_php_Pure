@@ -137,9 +137,4 @@ require 'views/header.php';
           <!-- /.col -->
         </div>
         <!-- /.row -->
-        <footer class="row bg-dark py-4">
-          <!-- Default to the left -->
-          <p class="mx-auto"><strong>Copyright &copy; 2023-2024 <a href="#">A Programmer</a>.</strong> All rights reserved.</p>
-        </footer>
-
-<?php include 'views/footer.html'?>
+<?php include 'views/footer.php'?>

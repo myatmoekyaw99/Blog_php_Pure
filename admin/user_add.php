@@ -17,31 +17,35 @@ if($_POST){
         </script>";
     }else{
 
-        $title = $_POST['title'];
-        $content = $_POST['content'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $role = $_POST['role'] ?? 0;
         $image = $_FILES['image']['name'];
+
+        // dd($role);
         move_uploaded_file($_FILES['image']['tmp_name'],$file);
 
-        $statement = $pdo->prepare("INSERT INTO posts(title,content,image,author_id) VALUES(:title,:content,:image,:authorid)");
+        $statement = $pdo->prepare("INSERT INTO users(name,email,image,role,password) VALUES(:name,:email,:image,:role,:password)");
         
         $result = $statement->execute(
             array(
-                ':title' => $title,
-                ':content' => $content,
+                ':name' => $name,
+                ':email' => $email,
                 ':image' => $image,
-                ':authorid' => $_SESSION['user_id']
+                ':password' => $password,
+                ':role' => $role
             ),
         );
 
         if($result){
 
             echo "<script> alert('Successfully updated!!');
-                window.location.href='index.php';
+                window.location.href='user_show.php';
                 </script>";
         }
     }
 }
-
 
 ?>
 
@@ -54,28 +58,33 @@ if($_POST){
       </div>
       <!-- /.card-header -->
       <div class="card-body">
-       <form action="add.php" method="post" enctype="multipart/form-data">
+       <form action="" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" value="" class="form-control" required>
+                <label for="title">Name</label>
+                <input type="text" name="name" id="name" value="" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <label for="content">Content</label>
-                <textarea name="content" id="content" class="form-control" rows="8" cols="80"></textarea>
+                <label for="content">Email</label>
+                <input type="email" name="email" id="email" class="form-control" required>
             </div>
 
             <div class="form-group">
                 <label for="image">Image</label><br>
-                <input type="file" name="image" id="image" value="" required>
+                <input type="file" name="image" id="image" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <label class="h5" id="role"><input type="checkbox" name="role" id="role" value="1" class="">  Admin</label>
+                <label for="password">Password</label><br>
+                <input type="password" name="password" id="password" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <a href="index.php" class="btn btn-warning" >Back</a>
+                <label class="h5" for="role"><input type="checkbox" name="role" id="role" value="1" class="">  Admin</label>
+            </div>
+
+            <div class="form-group">
+                <a href="user_show.php" class="btn btn-warning" >Back</a>
                 <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">
             </div>
        </form>

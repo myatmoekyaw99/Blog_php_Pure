@@ -8,7 +8,7 @@ require 'config/functions.php';
 
 if($_POST){
 
-  $file = 'images/'.$_FILES['image']['name'];
+  $file = 'admin/images/'.$_FILES['image']['name'];
   $imageType = pathinfo($file,PATHINFO_EXTENSION);
   
   if($imageType != 'png' && $imageType != 'jpg' && $imageType != 'jpeg'){
@@ -22,7 +22,6 @@ if($_POST){
     $email = $_POST['email'];
     $password = $_POST['password'];
     $image = $_FILES['image']['name'];
-    move_uploaded_file($_FILES['image']['tmp_name'],$file);
     
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email=:email");
     $stmt->bindValue(':email',$email);
@@ -34,6 +33,8 @@ if($_POST){
         alert('Email already exist!');
     </script>";
     }else{
+      move_uploaded_file($_FILES['image']['tmp_name'],$file);
+
         $statement = $pdo->prepare("INSERT INTO users(name,email,password,image) VALUES(:name,:email,:password,:image)");
         $result = $statement->execute(
             array(

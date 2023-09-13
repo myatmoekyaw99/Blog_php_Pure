@@ -129,7 +129,4 @@ require 'views/header.php';
         <!-- /.row -->
 
 <?php require 'views/pagination.php';?>
-        
-<?php require 'views/contact.php';?>
-
-<?php include 'views/footer.html';?>
+<?php include 'views/footer.php';?>

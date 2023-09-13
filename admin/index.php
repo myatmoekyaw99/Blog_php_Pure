@@ -47,6 +47,15 @@ $statement = $pdo->prepare("SELECT * FROM users WHERE role=0 ORDER BY id DESC");
 $statement->execute();
 $uresults = $statement->fetchAll();
 
+$statement = $pdo->prepare("SELECT * FROM posts");
+$statement->execute();
+$post = $statement->fetchAll();
+
+$statement = $pdo->prepare("SELECT * FROM comments");
+$statement->execute();
+$cmt = $statement->fetchAll();
+
+
 include 'views/header.php'; 
 
 ?>
@@ -61,7 +70,7 @@ include 'views/header.php';
 
           <div class="info-box-content">
             <span class="info-box-text">Posts</span>
-            <span class="info-box-number">1,410</span>
+            <span class="info-box-number"><?= count($post);?></span>
           </div>
           <!-- /.info-box-content -->
         </div>
@@ -74,7 +83,7 @@ include 'views/header.php';
 
           <div class="info-box-content">
             <span class="info-box-text">Comments</span>
-            <span class="info-box-number">410</span>
+            <span class="info-box-number"><?= count($cmt);?></span>
           </div>
           <!-- /.info-box-content -->
         </div>
@@ -168,7 +177,7 @@ include 'views/header.php';
           <li class="page-item <?php if($pageno <= 1){ echo 'disabled';}?>">
             <a class="page-link" href="<?php if($pageno <= 1){echo '#';}else{echo '?pageno='.($pageno-1);}?>">Previous</a>
           </li>
-          <li class="page-item"><a class="page-link" href="#"><?= $pageno; ?></a></li>
+          <li class="page-item"><a class="page-link" href="#">Page <?= $pageno; ?></a></li>
 
           <li class="page-item <?php if($pageno >= $total_pages){ echo 'disabled';}?>">
             <a class="page-link" href="<?php if($pageno >= $total_pages){ echo '#';}else{echo '?pageno='.($pageno+1);}?>">Next</a>

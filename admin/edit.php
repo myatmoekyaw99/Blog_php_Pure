@@ -37,13 +37,6 @@ checkAdmin();
                         ':image' => $image,
                     ),
                 );
-
-                if($result){
-                    echo "<script> 
-                    alert('Successfully updated!!');
-                    window.location.href='index.php';
-                    </script>";
-                }
             }      
         }else{
 
@@ -57,12 +50,13 @@ checkAdmin();
                 ),
             );
 
-            if($result){
+        }
 
-                echo "<script> alert('Successfully updated!!');
-                window.location.href='index.php';
-                </script>";
-            }
+        if($result){
+
+            echo "<script> alert('Successfully updated!!');
+            window.location.href='index.php';
+            </script>";
         }
     }    
 
@@ -100,7 +94,7 @@ checkAdmin();
 
             <div class="form-group">
                 <a href="index.php" class="btn btn-warning" >Back</a>
-                <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">
+                <input type="submit" name="submit" id="submit" value="Update" class="btn btn-primary">
             </div>
        </form>
       </div>
