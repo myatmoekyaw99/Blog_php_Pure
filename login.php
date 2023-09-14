@@ -20,10 +20,12 @@ if($_POST){
 
     if($user){
 
-        if($user['password'] === $password && $user['role'] === 0){
+        if($user['password'] === $password){
 
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['name'];
+            $_SESSION['role'] = $user['role'];
+            $_SESSION['image'] = $user['image'];
             $_SESSION['logged_in'] = time();
         
             header('location:index.php');

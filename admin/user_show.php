@@ -6,16 +6,18 @@ require '../config/functions.php';
 checkAdmin();
 // dd(checkAdmin());
 
+search();
+
 if(! empty($_GET['pageno'])){
   $pageno = $_GET['pageno'];
 }else{
   $pageno = 1;
 }
 
-$numOfrecs = 4;
+$numOfrecs = 10;
 $offset = ($pageno - 1) * $numOfrecs;
 
-if(empty($_POST['search'])){
+if(empty($_POST['search']) && empty($_COOKIE['search'])){
 
   $statement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
   $statement->execute();
@@ -29,7 +31,7 @@ if(empty($_POST['search'])){
 
 }else{
 
-  $searchKey = $_POST['search'];
+  $searchKey = $_POST['search'] ?? $_COOKIE['search'];
 
   $statement = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%".$searchKey."%' ORDER BY id DESC");
   $statement->execute();

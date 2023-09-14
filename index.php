@@ -4,16 +4,18 @@ session_start();
 require 'config/functions.php';
 require 'config/config.php';
 
+search();
+
 if(! empty($_GET['pageno'])){
   $pageno = $_GET['pageno'];
 }else{
   $pageno = 1;
 }
 
-$numOfrecs = 3;
+$numOfrecs = 6;
 $offset = ($pageno - 1) * $numOfrecs;
 
-if(empty($_POST['search'])){
+if(empty($_POST['search']) && empty($_COOKIE['search'])){
 
   $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
   $statement->execute();
@@ -26,7 +28,7 @@ if(empty($_POST['search'])){
   $results = $statement->fetchAll();
 
 }else{
-  $searchKey = $_POST['search'];
+  $searchKey = $_POST['search'] ?? $_COOKIE['search'];
 
   $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%".$searchKey."%' ORDER BY id DESC");
   $statement->execute();

@@ -5,6 +5,7 @@ require '../config/functions.php';
 
 checkAdmin();
 // dd(checkAdmin());
+search();
 
 if(! empty($_GET['pageno'])){
   $pageno = $_GET['pageno'];
@@ -12,10 +13,10 @@ if(! empty($_GET['pageno'])){
   $pageno = 1;
 }
 
-$numOfrecs = 4;
+$numOfrecs = 10;
 $offset = ($pageno - 1) * $numOfrecs;
 
-if(empty($_POST['search'])){
+if(empty($_POST['search']) && empty($_COOKIE['search'])){
 
   $statement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
   $statement->execute();
@@ -29,7 +30,7 @@ if(empty($_POST['search'])){
 
 }else{
 
-  $searchKey = $_POST['search'];
+  $searchKey = $_POST['search'] ?? $_COOKIE['search'];
 
   $statement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%".$searchKey."%' ORDER BY id DESC");
   $statement->execute();
@@ -150,7 +151,7 @@ include 'views/header.php';
               <td><?= $i ?></td>
               <td><?=$result['title']?></td>
               <td>
-              <?= substr($result['content'],0,60); ?>
+              <?= substr($result['content'],0,80); ?>
               </td>
               <td>
                 <div class="btn-group">
